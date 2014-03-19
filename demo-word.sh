@@ -1,5 +1,10 @@
 #!/bin/sh
 ## scipt for computing the vectors  and checking the accuracy with google's questions-words analogy task
+if [ ! -e text8 ]; then
+    wget https://dl.dropboxusercontent.com/u/39534006/text8.zip -O text8.gz
+    gzip -d text8.gz -f
+fi
+
 pwd=$PWD
 home=$HOME
 factorielib="${home}/.m2/repository/cc/factorie/factorie/1.0-SNAPSHOT/factorie-1.0-SNAPSHOT.jar"
