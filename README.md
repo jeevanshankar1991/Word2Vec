@@ -28,10 +28,10 @@ Each line in corpus file is assumed to be a document.
 
 Scripts
 ---------------------
-1. ./demo-word.sh 
+- ./demo-word.sh 
 The script demo-word.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can interactively explore the similarity of the words.
 
-2. ./demo-word-accuracy.sh 
+- ./demo-word-accuracy.sh 
 The scipt demo-word-accuracy.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can view the accuracy of the word vectors for various semantic and syntactic tasks.
 
 Hacking
