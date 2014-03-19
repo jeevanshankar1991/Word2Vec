@@ -83,8 +83,6 @@ class VocabBuilder(vocab_hash_size : Int = 20e6.toInt, sampling_table_size : Int
              rehash
               
            }
-         
-           
            // Vocab IO 
            def saveVocab(filename : String) : Unit = {
              var out = new java.io.PrintWriter(filename)

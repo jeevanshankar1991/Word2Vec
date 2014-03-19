@@ -26,7 +26,6 @@ abstract class WordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
       // IO Related
       private val corpus = opts.corpus.value
       private val outputFile = opts.output.value 
-      private val saveVocabFile = opts.save_vocab_file.value
       
       // data structures
       var vocab : VocabBuilder = null
@@ -49,7 +48,7 @@ abstract class WordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
             for (line <- io.Source.fromFile(corpus).getLines) {
                /*  SUPER SLOW . WHY ?
                 *  val doc = new Document(line)
-                 DeterministicTokenizer.process(doc)
+                 new DeterministicTokenizer.process(doc)
                  doc.tokens.foreach(token => vocab.addWordToVocab(token.string))
                  * 
                  */
@@ -57,18 +56,20 @@ abstract class WordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
                  totalLines += 1
             }
             vocab.sortVocab(minCount) // removes words whose count is less than minCount and sorts by frequency
-            vocab.buildSamplingTable // for getting random word from vocab in O(1) otherwise would O(log |V|s)
+            vocab.buildSamplingTable // for getting random word from vocab in O(1) otherwise would O(log |V|)
             V = vocab.size
             println("Vocab Size :" + V)
-            println("Saving Vocab")
-            vocab.saveVocab(saveVocabFile)
+            if (opts.saveVocabFile.hasValue) {
+              println("Saving Vocab")
+              vocab.saveVocab(opts.saveVocabFile.value)
+            }
             
       }
       // Component-2
       def learnEmbeddings() : Unit = {
           println("Learning Embeddings")
           optimizer = new AdaGradRDA(delta = adaGradDelta, rate = adaGradRate)    
-          weights  =  (0 until V).map(i =>  Weights(TensorUtils.setToRandom1wordvec(new DenseTensor1(D, 0)))) // initialized using wordvec random
+          weights  =  (0 until V).map(i =>  Weights(TensorUtils.setToRandom1(new DenseTensor1(D, 0)))) // initialized using wordvec random
           optimizer.initializeWeights(this.parameters)
           trainer = new HogwildTrainer(weightsSet = this.parameters, optimizer = optimizer, nThreads = threads, maxIterations = Int.MaxValue,
                                     logEveryN = -1, locksForLogging = false)

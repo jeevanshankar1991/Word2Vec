@@ -16,10 +16,10 @@ class EmbeddingOpts extends CmdOptions{
    val delta = new CmdOption("delta", 0.1, "DOUBLE", "delta for adaGrad")
     
    // IO Related (MUST GIVE Options)
-   val read_vocab_file = new CmdOption("read-vocab", "NONE", "STRING", "vocab file")
-   val save_vocab_file = new CmdOption("save-vocab", "/home/jeevan/word2vec-read-only/text8_linebreak_vocabmine", "STRING", "save vocab file")
-   val corpus = new CmdOption("train", "/home/jeevan/word2vec-read-only/text8_linebreak", "STRING", "train file")
-   val output = new CmdOption("output", "/home/jeevan/word2vec-read-only/vectors_text8_linebreak.txt", "STRING", "Use <file> to save the resulting word vectors")
+   // val readVocabFile = new CmdOption("read-vocab", "NONE", "STRING", "vocab file") TODO : Small code change
+   val saveVocabFile = new CmdOption("save-vocab", "NONE", "STRING", "save vocab file")
+   val corpus = new CmdOption("train", "NONE", "STRING", "train file")
+   val output = new CmdOption("output", "NONE", "STRING", "Use <file> to save the resulting word vectors")
   
    // Vocabulary related
    // Maximum 20 * 0.7 = 14M words in the vocabulary

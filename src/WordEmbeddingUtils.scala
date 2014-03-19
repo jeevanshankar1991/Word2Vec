@@ -37,18 +37,10 @@ object TensorUtils {
     
   } 
   
-  def setToRandom1wordvec(t : DenseTensor1) = {
+  def setToRandom1(t : DenseTensor1) = {
        for (i <- 0 until  t.length) 
          t(i) = ( rng.nextInt(Int.MaxValue) / (Int.MaxValue - 1).toDouble )/ t.length
        t
-  }
-
-  def setToRandom1(t: DenseTensor1) = {
-    
-    (0 until t.length).foreach(i => t(i) = rng.nextGaussian)
-    val norm = t.twoNorm
-    (0 until t.length).foreach(i => t(i) /= norm)
-    t
   }
   
 }
