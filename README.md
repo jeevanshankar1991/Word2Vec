@@ -8,8 +8,8 @@ Tools for computing distributed representtion of words
 
 Implementation of the Continuous Bag-of-Words (CBOW) and the Skip-gram model (SG), demo scripts.
 
-Given a text corpus, the word2vec tool learns a vector for every word in the vocabulary using the Continuous
-Bag-of-Words (CBOW) or the Skip-Gram model using negative sampling. Hierarchial Softmax support will be added soon. The user should to specify the following:
+Given a text corpus, Word2Vec learns a vector for every word in the vocabulary using the Continuous
+Bag-of-Words (CBOW) or the Skip-Gram model using negative sampling. Hierarchial Softmax support will be added soon. specify the following:
  - desired vector dimensionality . Default : 200
  - the size of the context window for either the Skip-Gram or the Continuous Bag-of-Words model. Default : 5
  - number of threads to use. Default : 12
@@ -27,15 +27,15 @@ Scripts
 ---------------------
 1. The script demo-word.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can interactively explore the similarity of the words.
 
-2. The scipt demo-word-accuracy.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can see the accuracy of the word vectors for various semantic and syntactic tasks.
+2. The scipt demo-word-accuracy.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can view the accuracy of the word vectors for various semantic and syntactic tasks.
 
 Hacking
 ---------------------
 WordEmbeddingModel is an abstract class providing abstractions like default implemenations of building vocab from corpus, saving vocab, learning embeddings via HogWildTrainer with Adagrad optimizer, making batch examples from corpus.
 
 How to build own model - All you is to override one method called "getExamplesFromSingleDocument(doc : String) : Seq[Example]". Input to this method is a document (String) . See two default implemenations 
- - SkipGram Architecture - SkipGramNegSamplingEmbeddingModel
- - CBOW Architecture - CBOWNegSamplingEmbeddingModel
+ - SkipGram Architecture - SkipGramEmbeddingModel
+ - CBOW Architecture - CBOWEmbeddingModel
 
 References 
 ------------------------------
