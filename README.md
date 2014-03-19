@@ -2,21 +2,24 @@ Word2Vec
 ========
 Google's word2vec in Scala for better hacking and research. 
 
-
-Tools for computing distributed representtion of words
+Intro
 ------------------------------------------------------
 
 Implementation of the Continuous Bag-of-Words (CBOW) and the Skip-gram model (SG), demo scripts.
 
-Given a text corpus, Word2Vec learns a vector for every word in the vocabulary using the Continuous
-Bag-of-Words (CBOW) or the Skip-Gram model using negative sampling. Hierarchial Softmax support will be added soon. specify the following:
- - desired vector dimensionality . Default : 200
- - the size of the context window for either the Skip-Gram or the Continuous Bag-of-Words model. Default : 5
- - number of threads to use. Default : 12
- - output file to store the vectors. 
- - number of examples for negative sampling . Default : 1
+Given a text corpus, Word2Vec learns a vector for every word in the vocab using the Continuous
+Bag-of-Words (CBOW) or the Skip-Gram model using negative sampling. 
+specify the following:
+ - corpus to train on (train)
+ - output file to store the vectors (output) . 
+ - desired vector dimensionality (size). Default : 200
+ - the size of the context window for either the Skip-Gram or the Continuous Bag-of-Words model (window). Default : 5
+ - number of threads to use. Default (threads) : 12
+ - number of examples for negative sampling (negative) . Default : 1
+ - type of the model (cbow) : Default skipgram (cbow=0 => skipgram, cbow=1 => CBOW )
 
-Learning is done using Hogwild Trainer with ADAGrad Optimizer. The Delta is set to 0.1 and rate is set to 0.025. These hyper-parameters need not changed be for corpus. 
+Learning is done using Hogwild Trainer with ADAGrad Optimizer. The Delta is set to 0.1 and rate is set to 0.025. These hyper-parameters need not be changed be for corpus. 
+Hierarchial Softmax support will be added soon. Generally, Negative Sampling gives better results and more scalable than Hierarchical SoftMax.
 
 Format of Corpus
 -------------------
@@ -25,15 +28,17 @@ Each line in corpus file is assumed to be a document.
 
 Scripts
 ---------------------
-1. The script demo-word.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can interactively explore the similarity of the words.
+1. ./demo-word.sh 
+The script demo-word.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can interactively explore the similarity of the words.
 
-2. The scipt demo-word-accuracy.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can view the accuracy of the word vectors for various semantic and syntactic tasks.
+2. ./demo-word-accuracy.sh 
+The scipt demo-word-accuracy.sh uses a small (100MB) text corpus from the web, and trains a small word vector model. After the training is finished, the user can view the accuracy of the word vectors for various semantic and syntactic tasks.
 
 Hacking
 ---------------------
 WordEmbeddingModel is an abstract class providing abstractions like default implemenations of building vocab from corpus, saving vocab, learning embeddings via HogWildTrainer with Adagrad optimizer, making batch examples from corpus.
 
-How to build own model - All you is to override one method called "getExamplesFromSingleDocument(doc : String) : Seq[Example]". Input to this method is a document (String) . See two default implemenations 
+How to build own model - Override the method called "getExamplesFromSingleDocument(doc : String) : Seq[Example]". Input to this method is a document (String) . Output of this method should be seq[Example].  See two default implemenations 
  - SkipGram Architecture - SkipGramEmbeddingModel
  - CBOW Architecture - CBOWEmbeddingModel
 
