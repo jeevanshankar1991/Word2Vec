@@ -1,5 +1,9 @@
 //package cc.factorie.app.nlp.embeddings;
 import java.io.FileReader
+//package cc.factorie.app.nlp.embeddings;
+import cc.factorie.la._
+import scala.util.Random
+import java.io.RandomAccessFile
 
 class WordReader(file : String) extends Iterator[String] {
     private var in = new FileReader(file)
@@ -23,9 +27,52 @@ class WordReader(file : String) extends Iterator[String] {
     def next() : String = { moveToNext; sb.toString } 
     
 }
-//package cc.factorie.app.nlp.embeddings;
-import cc.factorie.la._
-import scala.util.Random
+class LineReader(in : RandomAccessFile ) extends Iterator[String] {
+    //private var in = new FileReader(file)
+    private var sb : StringBuilder = null
+    moveToNext()
+   
+    private def moveToNext() : Unit = {
+                sb = new StringBuilder()
+                var c = in.read // read char
+                // go inside only if c is bad char
+	    	    while (c != -1 && c =='\n' ) c = in.read
+	    	    
+	    	    // go inside only if c is good char
+	    	    while (c != -1 && c != '\n' ) {
+	    		       	sb.+=(c.toChar)  // add the good char
+	    	    		c = in.read() //  read next char
+	    	   }  	  
+    }
+    
+    def hasNext() : Boolean = sb.length() > 0
+    def next() : String = { moveToNext; sb.toString } 
+    
+}
+class FastLineReader(file : String, skipBytes : Long) extends Iterator[String] {
+    //private var in = new FileReader(file)
+    private var sb : StringBuilder = null
+    private val in = new FileReader(file)
+    in.skip(skipBytes)
+    moveToNext()
+   
+    private def moveToNext() : Unit = {
+                sb = new StringBuilder()
+                var c = in.read // read char
+                // go inside only if c is bad char
+	    	    while (c != -1 && c =='\n' ) c = in.read
+	    	    
+	    	    // go inside only if c is good char
+	    	    while (c != -1 && c != '\n' ) {
+	    		       	sb.+=(c.toChar)  // add the good char
+	    	    		c = in.read() //  read next char
+	    	   }  	  
+    }
+    
+    def hasNext() : Boolean = sb.length() > 0
+    def next() : String = { moveToNext; sb.toString } 
+    
+}
 
 object TensorUtils {
   

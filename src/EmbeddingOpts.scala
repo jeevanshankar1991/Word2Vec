@@ -10,6 +10,8 @@ class EmbeddingOpts extends CmdOptions{
    val negative = new CmdOption("negative", 1, "INT", "use <int> number of negative examples")
    val minCount = new CmdOption("min-count", 5, "INT", "This will discard words that appear less than <int> times; default is 5")
    val cbow = new CmdOption("cbow", 0, "INT", "This will will run skip gram with negative sampling") // 1 would be SkipGram // default method is skipgram 
+   val sense = new CmdOption("sense", 3, "INT", "use <int> number of senses")
+   val sample = new CmdOption("sample", 0.0001, "DOUBLE", "use <double> subsampling")
    
    // Optimization related (Don't change if you do not understand how vectors are initialized)
    val rate = new CmdOption("rate", 0.025, "DOUBLE", "learning rate for adaGrad")

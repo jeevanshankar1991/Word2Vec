@@ -13,12 +13,12 @@ import cc.factorie.la.DenseTensor1
 import java.io.PrintWriter
 import java.io.File
 import scala.util.Random
-import cc.factorie.optimize.HogwildTrainer
 
-abstract class WordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
+abstract class MSWordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
     
       // Algo related
       val D = opts.dimension.value // default value is 200
+      val S = opts.sense.value // default value is 5
       private val threads = opts.threads.value  //  default value is 12
       private val adaGradDelta = opts.delta.value // default value is 0.1
       private val adaGradRate = opts.rate.value //  default value is 0.025 
@@ -30,11 +30,11 @@ abstract class WordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
       
       // data structures
       var vocab : VocabBuilder = null
-      var trainer : HogwildTrainer = null
+      private var trainer : HogwildTrainer = null
       private var optimizer : AdaGradRDA = null
       private var corpusLineItr : Iterator[String] = null
       var V : Int = 0
-      var weights : Seq[Weights] = null
+      var weights : Seq[Seq[Weights]] = null
      
       
       // debug info
@@ -70,14 +70,11 @@ abstract class WordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
       def learnEmbeddings() : Unit = {
           println("Learning Embeddings")
           optimizer = new AdaGradRDA(delta = adaGradDelta, rate = adaGradRate)    
-          weights  =  (0 until V).map(i =>  Weights(TensorUtils.setToRandom1(new DenseTensor1(D, 0)))) // initialized using wordvec random
+          weights  =  (0 until V).map(i =>  (0 until S+1).map(j => Weights(TensorUtils.setToRandom1(new DenseTensor1(D, 0))))) // initialized using wordvec random
           optimizer.initializeWeights(this.parameters)
           trainer = new HogwildTrainer(weightsSet = this.parameters, optimizer = optimizer, nThreads = threads, maxIterations = Int.MaxValue,
                                     logEveryN = -1, locksForLogging = false)
-          //trainer = new FastHogwildTrainer(weightsSet = this.parameters, optimizer = optimizer, nThreads = threads, maxIterations = Int.MaxValue)
-          
-          
-           corpusLineItr = io.Source.fromFile(corpus).getLines
+          corpusLineItr = io.Source.fromFile(corpus).getLines
            var examples = getExamplesInBatch()
            while (examples.size > 0 && !trainer.isConverged) {
              println("# documents (lines) done : %d, Progress %f".format(nLines, nLines/totalLines.toDouble * 100) + "%")
@@ -92,11 +89,13 @@ abstract class WordEmbeddingModel(val opts : EmbeddingOpts) extends Parameters {
          out.println( "%d %d".format(V, D) )
          for (v <- 0 until V) {
               out.print(vocab.getWord(v))
-              val embedding = weights(v).value
-              for (d <- 0 until D)
-                 out.print( " " + embedding(d))
-              out.print("\n")
-              out.flush()
+              for (s <- 0 until  S) {
+                  val embedding = weights(v)(s).value
+                  for (d <- 0 until D)
+                    out.print( " " + embedding(d))
+                  out.print("\n")
+                  out.flush()
+              }
          } 
          out.close()
       }

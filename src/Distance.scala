@@ -10,9 +10,22 @@ object Distance {
     var weights = Array[DenseTensor1]()
     var D = 0
     var V = 0
+    var TOP = 30
     def main(args : Array[String]) {
-        load(args(0))
+        
+        if (args.size != 1) {
+            println("Input vectors file missing. USAGE : distance vectors.txt") 
+            return 
+        }
+        val inputFile =  args(0)
+        load(inputFile)
         play()
+    }
+    
+    def nearestNeighbours(inputFile : String, numNeighbours : Int = 30) : Unit = {
+          TOP = numNeighbours
+          load(inputFile)
+          play()
     }
     def load(embeddingsFile : String ) : Unit = {
             var lineItr = Source.fromFile(embeddingsFile).getLines
@@ -22,13 +35,13 @@ object Distance {
              D = details(1)
              println( "# words : %d , # size : %d".format(V, D) )
              vocab = new Array[String](V)
+             weights = new Array[DenseTensor1](V)
              for (v <- 0 until V) {
-                 val line = lineItr.next.stripLineEnd.split(' ')
+                    val line = lineItr.next.stripLineEnd.split(' ')
                     vocab(v) = line(0).toLowerCase
                     weights(v) = new DenseTensor1(D, 0) // allocate the memory
-                    for (d <- 0 until D) weights(v)(d) = line(d+1).toDouble 
+                    for (d <- 0 until D) weights(v)(d) = line(d+1).toDouble
                     weights(v) /= weights(v).twoNorm
-           
              }
             println("loaded vocab and their embeddings")
     }
@@ -43,11 +56,12 @@ object Distance {
           else {
             val embedding_in = new DenseTensor1(D, 0)
             words.foreach(word => embedding_in.+=(weights(word)))
+            embedding_in./=(words.size)
             var pq = new PriorityQueue[(String, Double)]()(dis)
-            for (i <- 0 until vocab.size) if (words.size != 1 && words(0) != i) {
+            for (i <- 0 until vocab.size) if (words.size != 1 || !words(0).equals(vocab(i)) ) {
                     val embedding_out = weights(i)
                     val score = TensorUtils.cosineDistance(embedding_in, embedding_out).abs
-                    if (i < 40) pq.enqueue( vocab(i) -> score)
+                    if (i < TOP) pq.enqueue( vocab(i) -> score)
                     else if (score > pq.head._2) { // if the score is greater the min, then add to the heap
                       pq.dequeue
                       pq.enqueue( vocab(i) -> score)

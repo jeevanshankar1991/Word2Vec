@@ -12,16 +12,33 @@ class VocabBuilder(vocab_hash_size : Int = 20e6.toInt, sampling_table_size : Int
            private var vocab_size = 0 
            private var min_reduce = 1
            private val power : Double = 0.75 
+           
+           // assign internal params 
+           private var rng = new Random
+           private var train_words = 0
+           private var prev_vocab_size = 0
+           
            // allocate data structures
            private var vocab_hash = new Array[Int](vocab_hash_size)
            private var vocab = new Array[vocab_word](vocab_max_size)
            private var sampling_table = new Array[Int](sampling_table_size)
-           private var rng = new Random
+           private var sub_sampling_table = new Array[Double](vocab_size)
+           
+         
           
            (0 until vocab_hash_size).foreach(i => vocab_hash(i) = -1)
            (0 until vocab_max_size).foreach(i => vocab(i) = null)
             
            def size() : Int = vocab_size
+           def trainWords() : Long = {
+               // compute only if the vocab has changed .
+               if (prev_vocab_size != vocab_size ) {
+                   train_words = 0
+                   vocab.foreach(word => train_words += word.cn)
+                   prev_vocab_size = vocab_size
+               }
+               train_words
+           }
 
            def addWordToVocab(key : String) : Unit = {
                  val id = getId(key)
@@ -59,6 +76,9 @@ class VocabBuilder(vocab_hash_size : Int = 20e6.toInt, sampling_table_size : Int
                   hash = (hash + 1) % vocab_hash_size
                 }
                 return -1   
+           }
+           def getCount(id : Int) : Int = {
+                vocab(id).cn
            }
            
            def getId(word : String) : Int = {
@@ -102,12 +122,12 @@ class VocabBuilder(vocab_hash_size : Int = 20e6.toInt, sampling_table_size : Int
                      val word = detail(0)
                      val cnt = detail(1).toInt
                      addWordToVocab(word)
-                     vocab( getId(word) ).cn += cnt 
+                     vocab( getId(word) ).cn = cnt // Assumption : vocab file does have duplicate words
                }
            }
            
           // Sampling Functions
-           def buildSamplingTable : Unit = {
+           def buildSamplingTable() : Unit = {
                rng = new Random
                var i = 0 
                var train_words_pow : Long = 0
@@ -126,9 +146,22 @@ class VocabBuilder(vocab_hash_size : Int = 20e6.toInt, sampling_table_size : Int
                  }
                  if (i >= vocab_size) i = vocab_size - 1
                }
+           }
+          def buildSubSamplingTable(sample : Double) : Unit = { 
+              trainWords()
+              if (sample > 0) {
+                sub_sampling_table = new Array[Double](vocab_size)
+                for (a <- 0 until vocab_size) {
+                  val cnt = vocab(a).cn
+                  val ran = (math.sqrt(cnt / (sample * train_words)) + 1) * (sample * train_words) / cnt
+                  sub_sampling_table(a) = ran
+                }
+              }
+            
           }
           def getRandWordId() : Int = sampling_table( rng.nextInt(sampling_table_size) )
           def getRandWord() : String = vocab( getRandWordId ).word
+          def getSubSampleProb(id : Int ) : Double = sub_sampling_table(id)
           
            
           // TODO : def BuildBinaryTree = { } 
