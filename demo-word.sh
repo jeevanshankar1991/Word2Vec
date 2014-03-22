@@ -13,7 +13,7 @@ if [ $? -eq 0 ]; then
  mv ${wordvec} ../../${wordvec}
  cd ../..
  wordvecjar=$pwd/$wordvec
- java -Xmx10g -cp "${wordvecjar}:${factorielib}:${scalalib}" WordVec --cbow=1 --train $home/word2vec-read-only/text8_linebreak --output vectors_cbow.txt --size=200 --window=5 --min-count=5 --threads=20 --negative=1 --sample=0.000001
+ java -Xmx10g -cp "${wordvecjar}:${factorielib}:${scalalib}" WordVec --cbow=1 --train text8 --output vectors_cbow.txt --size=200 --window=5 --min-count=5 --threads=20 --negative=1 --sample=0.000001
   if [ $? -eq 0 ]; then
     ./distance vectors_cbow.txt
   fi
