@@ -26,6 +26,7 @@ abstract class FastWordEmbeddingModel(val opts : EmbeddingOpts) extends Paramete
       private val adaGradDelta = opts.delta.value // default value is 0.1
       private val adaGradRate = opts.rate.value //  default value is 0.025 
       private val minCount = opts.minCount.value
+      private val maxCount = opts.maxCount.value 
       private val vocabHashSize = opts.vocabHashSize.value
       private val samplingTableSize = opts.samplingTableSize.value
       
@@ -64,7 +65,7 @@ abstract class FastWordEmbeddingModel(val opts : EmbeddingOpts) extends Paramete
                  println(totalLines)
                  totalLines += 1
             }
-            vocab.sortVocab(minCount) // removes words whose count is less than minCount and sorts by frequency
+            vocab.sortVocab(minCount, maxCount) // removes words whose count is less than minCount and sorts by frequency
             vocab.buildSamplingTable // for getting random word from vocab in O(1) otherwise would O(log |V|)
             vocab.buildSubSamplingTable(opts.sample.value)
             V = vocab.size
