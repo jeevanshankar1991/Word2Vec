@@ -1,8 +1,8 @@
 #!/bin/sh
 ## scipt for computing the vectors  and checking the accuracy with google's questions-words analogy task
 if [ ! -e text8 ]; then
-    #wget https://dl.dropboxusercontent.com/u/39534006/text8.zip -O text8.gz
-    curl -O https://dl.dropboxusercontent.com/u/39534006/text8.zip
+    wget https://dl.dropboxusercontent.com/u/39534006/text8.zip -O text8.gz
+    #curl -O https://dl.dropboxusercontent.com/u/39534006/text8.zip
     unzip text8.zip
 fi
 pwd=$PWD
