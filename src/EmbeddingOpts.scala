@@ -11,7 +11,6 @@ class EmbeddingOpts extends CmdOptions{
    val minCount = new CmdOption("min-count", 5, "INT", "This will discard words that appear less than <int> times; default is 5")
    val maxCount = new CmdOption("max-count", 100, "INT", "This will discard words top <int> words")
    val cbow = new CmdOption("cbow", 0, "INT", "This will will run skip gram with negative sampling") // 1 would be SkipGram // default method is skipgram 
-   val sense = new CmdOption("sense", 3, "INT", "use <int> number of senses")
    val sample = new CmdOption("sample", 0.0001, "DOUBLE", "use <double> subsampling")
    
    // Optimization related (Don't change if you do not understand how vectors are initialized)
@@ -25,7 +24,7 @@ class EmbeddingOpts extends CmdOptions{
    val output = new CmdOption("output", "NONE", "STRING", "Use <file> to save the resulting word vectors")
   
    // Vocabulary related
-   // Maximum 20 * 0.7 = 14M words in the vocabulary
+   // Maximum 20 * 0.7 = 14M words in the vocabulary (Don;t change if you understand how vocabBuilder works)
    val vocabHashSize = new CmdOption("vocab-hash-size", 20e6.toInt, "INT", "Vocabulary hash size" ) 
    val samplingTableSize = new CmdOption("sampling-table-size", 1e8.toInt, "INT", "Sampling Table size")
    
