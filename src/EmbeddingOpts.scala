@@ -9,6 +9,7 @@ class EmbeddingOpts extends CmdOptions{
    val threads = new CmdOption("threads", 12, "INT", "use <int> threads")
    val negative = new CmdOption("negative", 1, "INT", "use <int> number of negative examples")
    val minCount = new CmdOption("min-count", 5, "INT", "This will discard words that appear less than <int> times; default is 5")
+   val maxCount = new CmdOption("max-count", 100, "INT", "This will discard words top <int> words")
    val cbow = new CmdOption("cbow", 0, "INT", "This will will run skip gram with negative sampling") // 1 would be SkipGram // default method is skipgram 
    val sense = new CmdOption("sense", 3, "INT", "use <int> number of senses")
    val sample = new CmdOption("sample", 0.0001, "DOUBLE", "use <double> subsampling")
