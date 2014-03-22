@@ -50,11 +50,13 @@ The scipt demo-word-accuracy.sh uses a small (100MB) text corpus from the web, a
 
 Hacking
 ---------------------
-WordEmbeddingModel is an abstract class providing abstractions like default implemenations of building vocab from corpus, saving vocab, learning embeddings via HogWildTrainer with Adagrad optimizer, making batch examples from corpus.
+1. WordEmbeddingModel is an abstract class providing abstractions like default implemenations of building vocab from corpus, saving vocab, learning embeddings via HogWildTrainer with Adagrad optimizer, making batch examples from corpus.
 
-How to build own model - Override the method called "getExamplesFromSingleDocument(doc : String) : Seq[Example]". Input to this method is a document (String) . Output of this method should be seq[Example].  See two default implemenations 
+How to build own model - Override the method called "process(doc : String) : Int". Input to this method is a document (String) . Output of this method is number of words processes.  See two default implemenations to get more clarity.  
  - SkipGram Architecture - SkipGramEmbeddingModel
  - CBOW Architecture - CBOWEmbeddingModel
+
+2. WordVec.scala is a client code with which you interact/talk to various models using various options provided by the user. See the code for more clarity . 
 
 References 
 ------------------------------
