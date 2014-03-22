@@ -29,9 +29,16 @@ Format of Corpus
 Corpus is assumed to one big file (ranging from 100MB to 10GB). 
 Each line in corpus file is assumed to be a document.   
 
-Performance
+Performance (as taken from https://code.google.com/p/word2vec/)
 --------------
+The training speed can be significantly improved by using parallel training on multiple-CPU machine (use the switch '-threads N'). The hyper-parameter choice is crucial for performance (both speed and accuracy), however varies for different applications. The main choices to make are:
 
+- architecture: skip-gram (slower, better for infrequent words) vs CBOW (fast)
+- the training algorithm: hierarchical softmax (better for infrequent words) vs negative sampling (better for frequent words, better with low dimensional vectors). Note : Right now, hierarchical soft-max is not provided but will added soon
+- sub-sampling of frequent words: can improve both accuracy and speed for large data sets (useful values are in range 1e-3 to 1e-5). Note : I have also added an option (max-count), where you can ignore top frequent words in your training algorithm. 
+- dimensionality of the word vectors: usually more is better, but not always
+- context (window) size: for skip-gram usually around 10, for CBOW around 5
+- 
 Scripts
 ---------------------
 - ./demo-word.sh 
@@ -51,6 +58,7 @@ How to build own model - Override the method called "getExamplesFromSingleDocume
 References 
 ------------------------------
 To understand the gradient and objective functions , refer to 
+- https://code.google.com/p/word2vec/
 - word2vec Explained: Deriving Mikolov et al.’s Negative-Sampling Word-Embedding Method Yoav Goldberg and Omer Levy http://arxiv.org/pdf/1402.3722v1.pdf
 - Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. Distributed Representations of Words and Phrases and their Compositionality. In Proceedings of NIPS, 2013.
 - Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. Efficient Estimation of Word Representations in Vector Space. In Proceedings of Workshop at ICLR, 2013.
