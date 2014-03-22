@@ -38,7 +38,6 @@ The training speed can be significantly improved by using parallel training on m
 - sub-sampling of frequent words: can improve both accuracy and speed for large data sets (useful values are in range 1e-3 to 1e-5). Note : I have also added an option (max-count), where you can ignore top frequent words in your training algorithm. 
 - dimensionality of the word vectors: usually more is better, but not always
 - context (window) size: for skip-gram usually around 10, for CBOW around 5
-- 
 Scripts
 ---------------------
 - ./demo-word.sh 
