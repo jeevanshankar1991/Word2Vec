@@ -1,8 +1,8 @@
 #!/bin/sh
 ## scipt for computing the vectors  and checking the accuracy with google's questions-words analogy task
 if [ ! -e text8 ]; then
-    wget https://dl.dropboxusercontent.com/u/39534006/text8.zip -O text8.gz
-    gzip -d text8.gz -f
+    wget https://dl.dropboxusercontent.com/u/39534006/text8.zip -O 
+    unzip text8.zip
 fi
 pwd=$PWD
 home=$HOME
@@ -17,6 +17,6 @@ if [ $? -eq 0 ]; then
  mv ${wordvec} ../../${wordvec}
  cd ../..
  wordvecjar=$pwd/$wordvec
- java -Xmx10g -cp "${wordvecjar}:${factorielib}:${scalalib}" WordVec --cbow=0 --train text8 --output vectors.txt --size=200 --window=5 --min-count=5 --threads=12 --save-vocab=text8.vocab 
+ java -Xmx10g -cp "${wordvecjar}:${factorielib}:${scalalib}" WordVec --cbow=0 --train text8 --output vectors.txt --size=200 --window=5 --min-count=5 --max-count=50 --sample=0.001 --threads=12 --save-vocab=text8.vocab 
 fi
 
