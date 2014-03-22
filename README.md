@@ -18,7 +18,7 @@ specify the following:
  - number of examples for negative sampling (negative) . Default : 1
  - type of the model (cbow) : Default skipgram (cbow=0 => skipgram, cbow=1 => CBOW )
  - number of times the word should have occured atleast (min-count) . Default : 5
- - number of most frequent words to ignore (max-count) . Default : 1000
+ - number of most frequent words to ignore (max-count) . Default : 100
  - sub-sampling (sample) . Default : 1e-3
 
 Learning is done using Hogwild Trainer with ADAGrad Optimizer. The Delta is set to 0.1 and rate is set to 0.025. These hyper-parameters need not be changed be for corpus. 
@@ -28,6 +28,9 @@ Format of Corpus
 -------------------
 Corpus is assumed to one big file (ranging from 100MB to 10GB). 
 Each line in corpus file is assumed to be a document.   
+
+Performance
+--------------
 
 Scripts
 ---------------------
