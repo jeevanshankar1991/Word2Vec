@@ -95,10 +95,13 @@ class VocabBuilder(vocab_hash_size : Int = 20e6.toInt, sampling_table_size : Int
            def getWord(id : Int) : String = vocab(id).word
 
            // Vocab sorting 
-           def sortVocab(min_count : Int = 5) : Unit =  {
+           def sortVocab(min_count : Int = 5, max_count : Int = 200) : Unit =  {
             
              for (a <- vocab_size until vocab.size) vocab(a) = null
              vocab = vocab.filter(ele => (ele != null && ele.cn >= min_count)).sortWith( (x, y) => y.cn < x.cn )
+             for (a <- 0 until max_count)
+                    vocab(a) = null
+             vocab = vocab.filter(ele => ele != null)
              vocab_size = vocab.size
              rehash
               
