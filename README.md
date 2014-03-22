@@ -17,6 +17,9 @@ specify the following:
  - number of threads to use. Default (threads) : 12
  - number of examples for negative sampling (negative) . Default : 1
  - type of the model (cbow) : Default skipgram (cbow=0 => skipgram, cbow=1 => CBOW )
+ - number of times the word should have occured atleast (min-count) . Default : 5
+ - number of most frequent words to ignore (max-count) . Default : 1000
+ - sub-sampling (sample) . Default : 1e-3
 
 Learning is done using Hogwild Trainer with ADAGrad Optimizer. The Delta is set to 0.1 and rate is set to 0.025. These hyper-parameters need not be changed be for corpus. 
 Hierarchial Softmax support will be added soon. Generally, Negative Sampling gives better results and more scalable than Hierarchical SoftMax.
