@@ -17,6 +17,9 @@ specify the following:
  - number of threads to use. Default (threads) : 12
  - number of examples for negative sampling (negative) . Default : 1
  - type of the model (cbow) : Default skipgram (cbow=0 => skipgram, cbow=1 => CBOW )
+ - number of times the word should have occured atleast (min-count) . Default : 5
+ - number of most frequent words to ignore (max-count) . Default : 100
+ - sub-sampling (sample) . Default : 1e-3
 
 Learning is done using Hogwild Trainer with ADAGrad Optimizer. The Delta is set to 0.1 and rate is set to 0.025. These hyper-parameters need not be changed be for corpus. 
 Hierarchial Softmax support will be added soon. Generally, Negative Sampling gives better results and more scalable than Hierarchical SoftMax.
@@ -25,6 +28,17 @@ Format of Corpus
 -------------------
 Corpus is assumed to one big file (ranging from 100MB to 10GB). 
 Each line in corpus file is assumed to be a document.   
+
+Performance (as taken from https://code.google.com/p/word2vec/)
+--------------
+The training speed can be significantly improved by using parallel training on multiple-CPU machine (use the switch '-threads N'). The hyper-parameter choice is crucial for performance (both speed and accuracy), however varies for different applications. The main choices to make are:
+
+- architecture: skip-gram (slower, better for infrequent words) vs CBOW (fast)
+- the training algorithm: hierarchical softmax (better for infrequent words) vs negative sampling (better for frequent words, better with low dimensional vectors). Note : Right now, hierarchical soft-max is not provided but will added soon
+- sub-sampling of frequent words: can improve both accuracy and speed for large data sets (useful values are in range 1e-3 to 1e-5). Note : I have also added an option (max-count), where you can ignore top frequent words in your training algorithm. 
+- dimensionality of the word vectors: usually more is better, but not always
+- context (window) size: for skip-gram usually around 10, for CBOW around 5
+
 
 Scripts
 ---------------------
@@ -45,6 +59,7 @@ How to build own model - Override the method called "getExamplesFromSingleDocume
 References 
 ------------------------------
 To understand the gradient and objective functions , refer to 
+- https://code.google.com/p/word2vec/
 - word2vec Explained: Deriving Mikolov et al.’s Negative-Sampling Word-Embedding Method Yoav Goldberg and Omer Levy http://arxiv.org/pdf/1402.3722v1.pdf
 - Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. Distributed Representations of Words and Phrases and their Compositionality. In Proceedings of NIPS, 2013.
 - Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean. Efficient Estimation of Word Representations in Vector Space. In Proceedings of Workshop at ICLR, 2013.
