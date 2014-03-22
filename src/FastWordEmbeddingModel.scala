@@ -62,7 +62,7 @@ abstract class FastWordEmbeddingModel(val opts : EmbeddingOpts) extends Paramete
                  * 
                  */
                  line.stripLineEnd.split(' ').foreach(word => vocab.addWordToVocab(word))
-                 println(totalLines)
+                 //println(totalLines)
                  totalLines += 1
             }
             vocab.sortVocab(minCount, maxCount) // removes words whose count is less than minCount and sorts by frequency
@@ -83,19 +83,9 @@ abstract class FastWordEmbeddingModel(val opts : EmbeddingOpts) extends Paramete
           optimizer = new AdaGradRDA(delta = adaGradDelta, rate = adaGradRate)    
           weights  =  (0 until V).map(i =>  Weights(TensorUtils.setToRandom1(new DenseTensor1(D, 0)))) // initialized using wordvec random
           optimizer.initializeWeights(this.parameters)
-          //trainer = new HogwildTrainer(weightsSet = this.parameters, optimizer = optimizer, nThreads = threads, maxIterations = Int.MaxValue,
-          //                         logEveryN = -1, locksForLogging = false)
           trainer = new FastHogwildTrainer(weightsSet = this.parameters, optimizer = optimizer, nThreads = threads, maxIterations = Int.MaxValue)
            val files = (0 until threads).map(i => i)
            Threading.parForeach(files, threads)(processBigData(_))
-          /*
-           corpusLineItr = io.Source.fromFile(corpus).getLines
-           var examples = getExamplesInBatch()
-           while (examples.size > 0 && !trainer.isConverged) {
-             println("# documents (lines) done : %d, Progress %f".format(nLines, nLines/totalLines.toDouble * 100) + "%")
-             trainer.processExamples(examples)
-             examples = getExamplesInBatch()
-           } */
            println("DONE")
           //store()
       }
@@ -114,15 +104,6 @@ abstract class FastWordEmbeddingModel(val opts : EmbeddingOpts) extends Paramete
          out.close()
       }
       
-      // TODO : make this process parallel 
-     /* def getExamplesInBatch(maxEg : Int = 1e5.toInt) : Seq[Example] = {
-           var examples = new collection.mutable.ArrayBuffer[Example]
-           while (examples.size < maxEg && corpusLineItr.hasNext) {
-                  examples ++= getExamplesFromSingleDocument(corpusLineItr.next)
-                  nLines += 1
-           }
-           examples
-      }*/
       def processBigData(id : Int) : Unit = {
          /* val randomAccessFile = new RandomAccessFile(corpus, "r")
           val fileLen = randomAccessFile.length()
@@ -150,6 +131,4 @@ abstract class FastWordEmbeddingModel(val opts : EmbeddingOpts) extends Paramete
       }
       // override this function in your Embedding Model like SkipGramEmbedding or CBOWEmbedding
       def process(doc : String) : Int
-      //def getExamplesFromSingleDocument(doc : String) : Seq[Example]
-      
 }
