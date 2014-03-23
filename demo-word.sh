@@ -20,7 +20,7 @@ if [ $? -eq 0 ]; then
  wordvecjar=$pwd/$wordvec
  java -Xmx10g -cp "${wordvecjar}:${factorielib}:${scalalib}" WordVec --cbow=1 --train text8 --output vectors_cbow.txt --size=200 --window=5 --sample=0.00001 --min-count=5 --max-count=125 --threads=12 --save-vocab=text8.vocab 
   if [ $? -eq 0 ]; then
-    ./distance vectors_cbow.txt 30000 < questions-words.txt
+    ./distance vectors_cbow.txt
     # to compute accuracy with the full vocabulary, use: ./compute-accuracy vectors.bin < questions-words.txt
   fi
 fi
