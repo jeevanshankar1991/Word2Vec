@@ -10,7 +10,7 @@ home=$HOME
 factorielib="${home}/.m2/repository/cc/factorie/factorie/1.0-SNAPSHOT/factorie-1.0-SNAPSHOT.jar"
 scalalib="${home}/.m2/repository/org/scala-lang/scala-library/2.10.2/scala-library-2.10.2.jar"
 wordvec="wordvec.jar"
-gcc compute-accuracy.c -o compute-accuracy -lm ## google's word2vec code
+gcc distance.c -o distance -lm ## google's word2vec code
 mvn compile; mvn compile;
 if [ $? -eq 0 ]; then
  cd target/classes
