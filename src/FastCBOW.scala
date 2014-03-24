@@ -103,7 +103,7 @@ class FastCBOWNegSamplingExample(model : FastCBOWNegSamplingEmbeddingModel, word
            gradient.accumulate(model.weights(contexts(i)), wordEmbedding, factor)
            i += 1
          }
-         contexts.foreach(context => gradient.accumulate(model.weights(context), wordEmbedding, factor) )
+        // contexts.foreach(context => gradient.accumulate(model.weights(context), wordEmbedding, factor) )
          gradient.accumulate(model.weights(word), contextEmbedding, factor)
     }
       
