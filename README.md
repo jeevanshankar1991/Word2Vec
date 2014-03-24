@@ -18,8 +18,10 @@ specify the following:
  - number of examples for negative sampling (negative) . Default : 1
  - type of the model (cbow) : Default skipgram (cbow=0 => skipgram, cbow=1 => CBOW )
  - number of times the word should have occured atleast (min-count) . Default : 5
- - number of most frequent words to ignore (max-count) . Default : 100
+ - number of most frequent words to ignore (max-count). To re-iterate, it will ignore top frequent words in training. Default : 100 (Note: this option was not available on google's word2vec)
  - sub-sampling (sample) . Default : 1e-3
+ - ada-grad rate (rate). Default : 0.025
+ - ada-grade delta (delta). Default : 0.1 . (Note : google's word2vec uses the simple stochastic gradient descent. So, delta is not an option to them).  
 
 Learning is done using Hogwild Trainer with ADAGrad Optimizer. The Delta is set to 0.1 and rate is set to 0.025. These hyper-parameters need not be changed be for corpus. 
 Hierarchial Softmax support will be added soon. Generally, Negative Sampling gives better results and more scalable than Hierarchical SoftMax.
@@ -36,6 +38,7 @@ The training speed can be significantly improved by using parallel training on m
 - architecture: skip-gram (slower, better for infrequent words) vs CBOW (fast)
 - the training algorithm: hierarchical softmax (better for infrequent words) vs negative sampling (better for frequent words, better with low dimensional vectors). Note : Right now, hierarchical soft-max is not provided but will added soon
 - sub-sampling of frequent words: can improve both accuracy and speed for large data sets (useful values are in range 1e-3 to 1e-5). Note : I have also added an option (max-count), where you can ignore top frequent words in your training algorithm. 
+- stop-words/most-frequent words : can improve the speed and accuracy improves on smaller data sets (~ 100MB) but couldn;t observe any significant increase in performance on very large data sets (~10GB )
 - dimensionality of the word vectors: usually more is better, but not always
 - context (window) size: for skip-gram usually around 10, for CBOW around 5
 
