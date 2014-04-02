@@ -31,10 +31,15 @@ Format of Corpus
 Corpus is assumed to one big file (ranging from 100MB to 10GB). 
 Each line in corpus file is assumed to be sentence.   For eg, sample corpus 
 word_11 word_12 word_13 ..... word_1n 
-word_21 word_22 word_23 ..... word_2m 
+
+word_21 word_22 word_23 ..... word_2m
+
           ...
+          
           ...
+          
           ...
+          
 word_L1 word_L2 word_L3 ..... word_Lp 
 
 
