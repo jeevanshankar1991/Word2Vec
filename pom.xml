@@ -10,8 +10,8 @@
     <name>WordVec2</name>
 
     <properties>
-        <maven.compiler.source>1.5</maven.compiler.source>
-        <maven.compiler.target>1.5</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
         <encoding>UTF-8</encoding>
         <scala.version>2.10.2</scala.version>
     </properties>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.10.2</version>
+            <version>${scala.version}</version>
         </dependency>
         <dependency>
             <groupId>cc.factorie</groupId>
@@ -110,8 +110,17 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.6</version>
                 <executions>
+			<execution>
+							<id>scala-compile-first</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>add-source</goal>
+								<goal>compile</goal>
+							</goals>
+						</execution>
+
                     <execution>
                         <goals>
                             <goal>compile</goal>
